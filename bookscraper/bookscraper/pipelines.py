@@ -17,22 +17,23 @@ class BookscraperPipeline:
         field_names = adapter.field_names()
         for field_name in field_names:
             if field_name != 'description':
-               value = adapter.get(field_name)
-               adapter[field_name] = value[0].strip()
+                value = adapter.get(field_name)
+                adapter[field_name] = value[0].strip()
+
 
         ## catagory and product type --> switch to lowercase.
         lowercase_keys = ['catagory', 'product_type']
         for lowercase_key in lowercase_keys:
             value = adapter.get(lowercase_key)
-            adapter[lowercase_key] = value.lower()
+            adapter[lowercase_key] = value[0].lower()
 
 
 
         ## price --> convert to float
-        price_keys = ['price','price_excl_tax', 'price_incl_tax', 'tax']
+        price_keys = ['price', 'price_excl_tax', 'price_incl_tax', 'tax']
         for price_key in price_keys:
             value = adapter.get(price_key)
-            value = value.replace('£','')
+            value = value.replace('£', '')
             adapter[price_key] = float(value)
 
 
@@ -45,6 +46,7 @@ class BookscraperPipeline:
         else:
             availability_array = split_string_array[2].split(' ')
             adapter['availability'] = int(availability_array[0])
+
 
      ## reviews --> convert string in integer.
         num_reviews_string = adapter.get('num_reviews')
